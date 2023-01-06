@@ -55,43 +55,55 @@ class _PrescriptionState extends State<Prescription> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
+           Card(
+             margin: EdgeInsets.all(0),
               color: Colors.white,
-              padding: EdgeInsets.all(4),
-              child: SafeArea(child:Row(
-                children: [
-                  SizedBox(width: 12, height: 0),
-                  SvgPicture.asset(
-                      'assets/icons/prescriptions/back_icon.svg',
-                      width: 24,
-                      height: 24,
-                      semanticsLabel: 'A back arrow'
-                  ),
-                  SizedBox(width: 8, height: 0),
+              child: SafeArea(child:
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  children: [
+                    SizedBox(width: 12, height: 0),
+                    InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                          'assets/icons/prescriptions/back_icon.svg',
+                          width: 24,
+                          height: 24,
+                          semanticsLabel: 'A back arrow'
+                      ),
+                    ),
+                    SizedBox(width: 8, height: 0),
 
-                  Text("Prescription",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                        fontSize: 16
-                    ),),
+                    Text("Prescription",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          fontSize: 16
+                      ),),
 
-                ],
+                  ],
+                ),
               ),),
+            ),
+            SizedBox(
+              height: 2,
             ),
             SizedBox(height: 4,),
             SizedBox(
               child: Card(
-                color: Colors.pink,
+                color: Colors.white,
                 elevation: 2,
-                margin: EdgeInsets.all(4),
+                margin: const EdgeInsets.all(4),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24, left: 12),
-                      child: Text("Have a prescription? Upload here",
+                    const Padding(
+                      padding: EdgeInsets.only(top: 24, left: 12),
+                      child: Text('Have a prescription? Upload here',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: Colors.teal,
@@ -477,47 +489,44 @@ class _PrescriptionState extends State<Prescription> {
                 ),
               ),
             ),
-            Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.only(left: 12,right: 12, top: 12 , bottom: 12),
-                width: double.infinity,
-                child: Card(
-                  elevation: 0,
-                  margin: EdgeInsets.all(0),
-                  color: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                    //side: BorderSide(color: Colors.white70, width: 1),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(left: 12,right: 12, top: 12 , bottom: 12),
+              width: double.infinity,
+              child: Card(
+                elevation: 0,
+                margin: EdgeInsets.all(0),
+                color: Colors.teal,
+                shape: RoundedRectangleBorder(
+                  //side: BorderSide(color: Colors.white70, width: 1),
+                  borderRadius: BorderRadius.circular(50),
+                ),
 
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
 
 
-                        Text("Continue",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              fontSize: 16
-                          ),),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        SvgPicture.asset(
-                            'assets/icons/prescriptions/forward_icon.svg',
-                            width: 16,
-                            height: 16,
+                      Text("Continue",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
                             color: Colors.white,
-                            semanticsLabel: 'A back arrow'
-                        ),
-                      ],
-                    ),
+                            fontSize: 16
+                        ),),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      SvgPicture.asset(
+                          'assets/icons/prescriptions/forward_icon.svg',
+                          width: 16,
+                          height: 16,
+                          color: Colors.white,
+                          semanticsLabel: 'A back arrow'
+                      ),
+                    ],
                   ),
                 ),
               ),

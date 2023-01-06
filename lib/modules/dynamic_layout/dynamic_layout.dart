@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/constants.dart';
 import '../../common/tools.dart';
 import '../../models/index.dart';
+import '../../prescription.dart';
 import '../../routes/flux_navigate.dart';
 import '../../services/index.dart';
 import 'banner/banner_animate_items.dart';
@@ -121,6 +123,8 @@ class DynamicLayout extends StatelessWidget {
               );
             }
 
+
+
             return CategoryIcons(
               config: configValue,
               listCategoryName: listCategoryName,
@@ -134,14 +138,159 @@ class DynamicLayout extends StatelessWidget {
 
       case Layout.bannerImage:
         if (config['isSlider'] == true) {
-          return BannerSlider(
-            config: BannerConfig.fromJson(config),
-            onTap: (itemConfig) {
-              NavigateTools.onTapNavigateOptions(
-                context: context,
-                config: itemConfig,
-              );
-            },
+          return Column(
+            children: [
+              BannerSlider(
+                config: BannerConfig.fromJson(config),
+                onTap: (itemConfig) {
+                  NavigateTools.onTapNavigateOptions(
+                    context: context,
+                    config: itemConfig,
+                  );
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context) =>  Prescription()));
+                      },
+                      child: Flexible(
+                        child: SizedBox(
+                          width: 110,
+                          height: 110,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)
+
+
+                            ),
+                            color: Color(0xFFD4F1F4),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Upload\nPrescription", style:
+                                    TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black
+                                    ),),
+                                  Spacer(),
+                                  Row(
+
+                                    children: [
+                                        SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
+                                        width: 16,
+                                        color: Color(0xFF0000FF),
+                                        height: 16,),
+                                      Spacer(),
+                                      Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                      width: 34,
+                                      height: 34,),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: SizedBox(
+                        width: 110,
+                        height: 110,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)
+
+
+                          ),
+                          color: Color(0xFFD4F1F4),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Call For Order\n01234567890", style:
+                                TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black
+                                ),),
+                                Spacer(),
+                                Row(
+
+                                  children: [
+                                    SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
+                                      width: 16,
+                                      color: Color(0xFF32CD30),
+                                      height: 16,),
+                                    Spacer(),
+                                    Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                      width: 34,
+                                      height: 34,),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: SizedBox(
+                        width: 110,
+                        height: 110,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)
+
+
+                          ),
+                          color: Color(0xFFD4F1F4),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Healthcare\nProduct", style:
+                                TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black
+                                ),),
+                                Spacer(),
+                                Row(
+
+                                  children: [
+                                    SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
+                                      width: 16,
+                                      color: Color(0xFF8F00FF),
+                                      height: 16,),
+                                    Spacer(),
+                                    Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                      width: 34,
+                                      height: 34,),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           );
         }
 
@@ -168,7 +317,11 @@ class DynamicLayout extends StatelessWidget {
         );
 
       case Layout.blog:
-        return BlogGrid(config: BlogConfig.fromJson(config));
+        return Column(
+          children: [
+            BlogGrid(config: BlogConfig.fromJson(config)),
+          ],
+        );
 
       case Layout.video:
         return VideoLayout(config: config);
@@ -244,5 +397,7 @@ class DynamicLayout extends StatelessWidget {
       default:
         return const SizedBox();
     }
+
   }
+
 }
