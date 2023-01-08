@@ -150,141 +150,135 @@ class DynamicLayout extends StatelessWidget {
                 },
               ),
               Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
                     InkWell(
                       onTap: (){
                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  Prescription()));
                       },
-                      child: Flexible(
-                        child: SizedBox(
-                          width: 110,
-                          height: 110,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)
+                      child: SizedBox(
+                        width: 110,
+                        height: 110,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)
 
 
+                          ),
+                          color: Color(0xFFD4F1F4),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Upload\nPrescription", style:
+                                  TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black
+                                  ),),
+                                Spacer(),
+                                Row(
+
+                                  children: [
+                                      SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
+                                      width: 16,
+                                      color: Color(0xFF0000FF),
+                                      height: 16,),
+                                    Spacer(),
+                                    Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                    width: 34,
+                                    height: 34,),
+                                  ],
+                                )
+                              ],
                             ),
-                            color: Color(0xFFD4F1F4),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 110,
+                      height: 110,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)
+
+
+                        ),
+                        color: Color(0xFFD4F1F4),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Call For Order\n01234567890", style:
+                              TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black
+                              ),),
+                              Spacer(),
+                              Row(
+
                                 children: [
-                                  Text("Upload\nPrescription", style:
-                                    TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black
-                                    ),),
+                                  SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
+                                    width: 16,
+                                    color: Color(0xFF32CD30),
+                                    height: 16,),
                                   Spacer(),
-                                  Row(
-
-                                    children: [
-                                        SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
-                                        width: 16,
-                                        color: Color(0xFF0000FF),
-                                        height: 16,),
-                                      Spacer(),
-                                      Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
-                                      width: 34,
-                                      height: 34,),
-                                    ],
-                                  )
+                                  Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                    width: 34,
+                                    height: 34,),
                                 ],
-                              ),
-                            ),
-
+                              )
+                            ],
                           ),
                         ),
+
                       ),
                     ),
-                    Flexible(
-                      child: SizedBox(
-                        width: 110,
-                        height: 110,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)
+                    SizedBox(
+                      width: 110,
+                      height: 110,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)
 
-
-                          ),
-                          color: Color(0xFFD4F1F4),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Call For Order\n01234567890", style:
-                                TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black
-                                ),),
-                                Spacer(),
-                                Row(
-
-                                  children: [
-                                    SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
-                                      width: 16,
-                                      color: Color(0xFF32CD30),
-                                      height: 16,),
-                                    Spacer(),
-                                    Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
-                                      width: 34,
-                                      height: 34,),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
 
                         ),
-                      ),
-                    ),
-                    Flexible(
-                      child: SizedBox(
-                        width: 110,
-                        height: 110,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)
+                        color: Color(0xFFD4F1F4),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Healthcare\nProduct", style:
+                              TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black
+                              ),),
+                              Spacer(),
+                              Row(
 
-
+                                children: [
+                                  SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
+                                    width: 16,
+                                    color: Color(0xFF8F00FF),
+                                    height: 16,),
+                                  Spacer(),
+                                  Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                    width: 34,
+                                    height: 34,),
+                                ],
+                              )
+                            ],
                           ),
-                          color: Color(0xFFD4F1F4),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Healthcare\nProduct", style:
-                                TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black
-                                ),),
-                                Spacer(),
-                                Row(
-
-                                  children: [
-                                    SvgPicture.asset('assets/icons/prescriptions/for_icon.svg',
-                                      width: 16,
-                                      color: Color(0xFF8F00FF),
-                                      height: 16,),
-                                    Spacer(),
-                                    Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
-                                      width: 34,
-                                      height: 34,),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-
                         ),
+
                       ),
                     ),
                   ],

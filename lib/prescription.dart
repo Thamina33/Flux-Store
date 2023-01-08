@@ -2,7 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fstore/routes/flux_navigate.dart';
+import 'package:fstore/services/dependency_injection.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'common/constants.dart';
+import 'screens/index.dart';
 
 
 
@@ -14,9 +20,16 @@ class Prescription extends StatefulWidget {
 }
 
 class _PrescriptionState extends State<Prescription> {
-
+  bool getStorageKey(String key) =>
+      injector<SharedPreferences>().getBool(key) ?? false;
   final ImagePicker imagePicker = ImagePicker();
-  
+
+  var isVisible = true ;
+  var notVisible = false;
+
+
+  bool isLoggedIn = false ;
+
 
   List<XFile>? imageFileList = [];
 
@@ -27,15 +40,20 @@ class _PrescriptionState extends State<Prescription> {
       imageFileList?.add(selectedImages);
     }
 
+
+
     setState(() {
     });
 
   }
 
+
+
   void selectImages() async {
     final selectedImages = await imagePicker.pickMultiImage();
 
     if (selectedImages.isNotEmpty) {
+
       imageFileList!.addAll(selectedImages);
     }
 
@@ -45,8 +63,10 @@ class _PrescriptionState extends State<Prescription> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       home: Scaffold(
         //backgroundColor: Colors.pink,
@@ -89,14 +109,13 @@ class _PrescriptionState extends State<Prescription> {
               ),),
             ),
             SizedBox(
-              height: 2,
+              height: 6,
             ),
-            SizedBox(height: 4,),
             SizedBox(
               child: Card(
                 color: Colors.white,
                 elevation: 2,
-                margin: const EdgeInsets.all(4),
+                margin: const EdgeInsets.symmetric(horizontal: 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +150,8 @@ class _PrescriptionState extends State<Prescription> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  selectImages();
+
+                                  openCamera();
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,8 +184,8 @@ class _PrescriptionState extends State<Prescription> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  openCamera();
-                                },
+                                  selectImages();
+                                  },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -194,72 +214,102 @@ class _PrescriptionState extends State<Prescription> {
                                 width: 1,
                                 height: 50,
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Visibility(
-                                    visible: false,
-                                    child: SvgPicture.asset(
-                                        'assets/icons/prescriptions/prescription_paper_icon.svg',
-                                        width: 18,
-                                        height: 18,
-                                        color: Colors.white,
-                                        semanticsLabel: 'A back arrow'
-                                    ),
-                                  ),
-                                  const Visibility(
-                                    visible: true,
-                                    child: Card(
-                                      elevation: 0,
-                                      margin: EdgeInsets.all(0),
-                                      color: Color(0xff00AEAE),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(4))
+                              InkWell(
+                                onTap: () async {
+                                  isLoggedIn = getStorageKey(
+                                      LocalStorageKey.loggedIn);
+
+                                  if (isLoggedIn == false) {
+                                    isVisible = true;
+                                    notVisible = false;
+                                    FluxNavigate.pushNamed(
+                                      RouteList.login,
+                                    ).then((value) {
+                                      print("object");
+                                    });
+                                    setState(() {
+
+                                    });
+                                  }
+
+                                  if(isLoggedIn == true){
+                                    isVisible = false;
+                                    notVisible = true;
+                                    setState(() {
+
+                                    });
+                                  }
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Visibility(
+                                      visible: notVisible,
+
+                                      child: SvgPicture.asset(
+                                          'assets/icons/prescriptions/prescription_icon.svg',
+                                          width: 18,
+                                          height: 18,
+                                          color: Colors.white,
+                                          semanticsLabel: 'A back arrow'
                                       ),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                                        child: Text("Login to View",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.white,
-                                              fontSize: 14
-                                          ),),
+                                    ),
+                                     Visibility(
+                                      visible: isVisible,
+                                      child: Card(
+                                        elevation: 0,
+                                        margin: EdgeInsets.all(0),
+                                        color: Color(0xff00AEAE),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(4))
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                                          child: Text("Login to View",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.white,
+                                                fontSize: 14
+                                            ),),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
-                                  Text("My Prescriptions",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white,
-                                        fontSize: 14
-                                    ),),
-                                ],
+
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text("My Prescriptions",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
+                                          fontSize: 14
+                                      ),),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    Container(
-                      height: 100,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GridView.builder(
-                              itemCount: imageFileList!.length,
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3
+                    SizedBox(
+                      height: 80,
+                      child: GridView.builder(
+                          itemCount: imageFileList!.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 5
 
-                              ),
-                              itemBuilder: (BuildContext context, int index) {
-                                return Image.file(File(imageFileList![index].path), fit: BoxFit.cover);
-                              }
                           ),
-                        )
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Image.file(File(imageFileList![index].path), width: 80 , height: 80, fit: BoxFit.cover),
+                            );
+                          }
+                      ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 4),
                       child: Row(
@@ -315,7 +365,7 @@ class _PrescriptionState extends State<Prescription> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Flexible(
+                          const Flexible(
                             child: Text("কেন প্রেসক্রিপশনের ছবি আপলোড করবেন?",
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
@@ -323,25 +373,45 @@ class _PrescriptionState extends State<Prescription> {
                                   fontSize: 14
                               ),),
                           ),
-                          SizedBox(width: 18,),
+                          const SizedBox(width: 18,),
                           Visibility(
                             visible: true,
-                            child: SvgPicture.asset(
-                                'assets/icons/prescriptions/ttop_icon.svg',
-                                width: 18,
-                                height: 18,
-                                color: Colors.teal,
-                                semanticsLabel: 'A back arrow'
+                            child: InkWell(
+                              onTap: (){
+                                isVisible = false ;
+
+                                setState(() {
+
+                                });
+
+                              },
+
+                              child: SvgPicture.asset(
+                                  'assets/icons/prescriptions/ttop_icon.svg',
+                                  width: 18,
+                                  height: 18,
+                                  color: Colors.teal,
+                                  semanticsLabel: 'A back arrow'
+                              ),
                             ),
                           ),
                           Visibility(
                             visible: true,
-                            child: SvgPicture.asset(
-                                'assets/icons/prescriptions/down_arrow_icon.svg',
-                                width: 16,
-                                height: 16,
-                                color: Colors.teal,
-                                semanticsLabel: 'A back arrow'
+                            child: InkWell(
+                              onTap: (){
+                                isVisible = true;
+                                setState(() {
+
+                                });
+
+                              },
+                              child: SvgPicture.asset(
+                                  'assets/icons/prescriptions/down_arrow_icon.svg',
+                                  width: 16,
+                                  height: 16,
+                                  color: Colors.teal,
+                                  semanticsLabel: 'A back arrow'
+                              ),
                             ),
                           ),
 
@@ -349,13 +419,13 @@ class _PrescriptionState extends State<Prescription> {
                       ),
                     ),
                     Visibility(
-                      visible: true,
+                      visible: isVisible,
                       child: SizedBox(
                         height: 200,
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              SizedBox(height: 12,),
+                              SizedBox(height: 6,),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                                 child: Row(
@@ -371,7 +441,7 @@ class _PrescriptionState extends State<Prescription> {
                                     ),
                                     SizedBox(width: 12,),
                                     const Flexible(
-                                      child: Text("কপ্রেসক্রিপশন হারানোর ভয় থেকে আপনি মুক্ত, আজীবনের জন্য Fluxstore অ্যাপে আপনি খুজে পাবেন আপনার ডিজিটাল প্রেসক্রিপশন।",
+                                      child: Text("ক্রেসক্রিপশন হারানোর ভয় থেকে আপনি মুক্ত, আজীবনের জন্য Fluxstore অ্যাপে আপনি খুজে পাবেন আপনার ডিজিটাল প্রেসক্রিপশন।",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             color: Colors.blueGrey,
@@ -385,7 +455,7 @@ class _PrescriptionState extends State<Prescription> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 12,),
+                              SizedBox(height: 6,),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                                 child: Row(
@@ -415,7 +485,7 @@ class _PrescriptionState extends State<Prescription> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 12,),
+                              SizedBox(height: 6,),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                                 child: Row(
@@ -445,7 +515,7 @@ class _PrescriptionState extends State<Prescription> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 12,),
+                              SizedBox(height: 6,),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                                 child: Row(
@@ -493,40 +563,56 @@ class _PrescriptionState extends State<Prescription> {
               alignment: Alignment.bottomCenter,
               margin: EdgeInsets.only(left: 12,right: 12, top: 12 , bottom: 12),
               width: double.infinity,
-              child: Card(
-                elevation: 0,
-                margin: EdgeInsets.all(0),
-                color: Colors.teal,
-                shape: RoundedRectangleBorder(
-                  //side: BorderSide(color: Colors.white70, width: 1),
-                  borderRadius: BorderRadius.circular(50),
-                ),
+              child: InkWell(
+                onTap: () async {
 
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                  isLoggedIn = getStorageKey(LocalStorageKey.loggedIn);
+
+                  if(isLoggedIn == false){
+                     FluxNavigate.pushNamed(
+                      RouteList.login,
+                    ).then((value) {
+
+                      print("object");
+
+                    });
+                  }
+                },
+                child: Card(
+                  elevation: 0,
+                  margin: EdgeInsets.all(0),
+                  color: Colors.teal,
+                  shape: RoundedRectangleBorder(
+                    //side: BorderSide(color: Colors.white70, width: 1),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
 
 
-                      Text("Continue",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
+                        Text("Continue",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              fontSize: 16
+                          ),),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        SvgPicture.asset(
+                            'assets/icons/prescriptions/forward_icon.svg',
+                            width: 16,
+                            height: 16,
                             color: Colors.white,
-                            fontSize: 16
-                        ),),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      SvgPicture.asset(
-                          'assets/icons/prescriptions/forward_icon.svg',
-                          width: 16,
-                          height: 16,
-                          color: Colors.white,
-                          semanticsLabel: 'A back arrow'
-                      ),
-                    ],
+                            semanticsLabel: 'A back arrow'
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

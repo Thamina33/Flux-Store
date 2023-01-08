@@ -135,4 +135,5 @@ class RouteList {
   static const String scrollable = 'scrollable';
   static const String pageTab = 'pageTab';
   static const String prescription  ='prescription';
+  static const String Myprescriptions  ='Myprescriptions';
 }

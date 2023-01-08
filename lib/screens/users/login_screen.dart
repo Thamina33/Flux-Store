@@ -345,6 +345,7 @@ class _LoginPageState extends BaseScreen<LoginScreen>
                                       .enterYourEmailOrUsername,
                                 ),
                               ),
+
                               CustomTextField(
                                 key: const Key('loginPasswordField'),
                                 autofillHints: const [AutofillHints.password],

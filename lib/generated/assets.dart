@@ -642,6 +642,7 @@ class Assets {
   static const String libGeneratedPluginRegistrant = 'lib/generated_plugin_registrant.dart';
   static const String libMain = 'lib/main.dart';
   static const String libModelsIndex = 'lib/models/index.dart';
+  static const String libMyPrescriptions = 'lib/MyPrescriptions.dart';
   static const String libPrescription = 'lib/prescription.dart';
   static const String libServicesIndex = 'lib/services/index.dart';
   static const String listingListingLocationModel = 'lib/models/listing/listing_location_model.dart';

@@ -217,6 +217,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             const SizedBox(
                               height: 30.0,
                             ),
+
                             CustomTextField(
                               key: const Key('registerFirstNameField'),
                               autofillHints: const [AutofillHints.givenName],

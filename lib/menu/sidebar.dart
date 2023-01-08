@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../MyPrescriptions.dart';
 import '../common/config.dart';
 import '../common/config/models/index.dart';
 import '../common/constants.dart';
@@ -10,6 +11,7 @@ import '../models/index.dart'
     show AppModel, BackDropArguments, Category, CategoryModel, UserModel;
 import '../modules/dynamic_layout/config/app_config.dart';
 import '../modules/dynamic_layout/helper/helper.dart';
+import '../prescription.dart';
 import '../routes/flux_navigate.dart';
 import '../services/index.dart';
 import '../widgets/common/index.dart' show FluxImage, WebView;
@@ -104,6 +106,7 @@ class MenuBarState extends State<SideBarMenu> {
 
   Widget drawerItem(
     DrawerItemsConfig drawerItemConfig,
+
     Map<String, GeneralSettingItem> subDrawerItem, {
     Color? iconColor,
     Color? textColor,
@@ -117,6 +120,7 @@ class MenuBarState extends State<SideBarMenu> {
     );
 
     switch (value) {
+
       case 'home':
         {
           return ListTile(
@@ -136,22 +140,39 @@ class MenuBarState extends State<SideBarMenu> {
         }
       case 'categories':
         {
-          return ListTile(
-            leading: Icon(
-              Icons.category,
-              size: 20,
-              color: iconColor,
-            ),
-            title: Text(
-              S.of(context).categories,
-              style: textStyle,
-            ),
-            onTap: () => pushNavigation(
-              !Provider.of<AppModel>(context, listen: false).isMultivendor
-                  ? RouteList.category
-                  : RouteList.vendorCategory,
-            ),
+          return Column(
+            children: [
+              ListTile(
+                leading: Icon(
+                  Icons.category,
+                  size: 20,
+                  color: iconColor,
+                ),
+                title: Text(
+                  S.of(context).categories,
+                  style: textStyle,
+                ),
+                onTap: () => pushNavigation(
+                  !Provider.of<AppModel>(context, listen: false).isMultivendor
+                      ? RouteList.category
+                      : RouteList.vendorCategory,
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.feed,
+                  size: 20,
+                  color: iconColor,
+                ),
+                title: Text("My Prescription"),
+                onTap: () => {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyPrescriptions()))
+
+              }
+              ),
+            ],
           );
+
         }
       case 'cart':
         {

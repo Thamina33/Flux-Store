@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inspireui/inspireui.dart' show AutoHideKeyboard;
 import 'package:provider/provider.dart';
 
+import '../MyPrescriptions.dart';
 import '../common/config.dart';
 import '../common/constants.dart';
 import '../common/tools.dart';
@@ -530,6 +531,12 @@ class Routes {
               (context) =>  Prescription(),
         );
 
+      case RouteList.Myprescriptions:
+        return _buildRoute(
+          settings,
+              (context) => const MyPrescriptions(),
+        );
+
       case RouteList.cart:
         final cartArgument = settings.arguments;
         if (cartArgument is CartScreenArgument) {
@@ -661,6 +668,7 @@ class Routes {
     );
   }
 }
+
 
 class _FadedTransitionRoute extends PageRouteBuilder {
   final Widget? widget;
