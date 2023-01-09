@@ -27,9 +27,6 @@ class _PrescriptionState extends State<Prescription> {
   final ScrollController _scrollController = ScrollController() ;
 
   var isVisible = true ;
-
-
-
   bool isLoggedIn = false ;
 
 
@@ -41,11 +38,9 @@ class _PrescriptionState extends State<Prescription> {
     final selectedImages = await imagePicker.pickImage(source: ImageSource.camera);
 
     if (selectedImages != null) {
+
       imageFileList?.add(selectedImages);
     }
-
-
-
     setState(() {
     });
 
@@ -57,11 +52,10 @@ class _PrescriptionState extends State<Prescription> {
     final selectedImages = await imagePicker.pickMultiImage();
 
     if (selectedImages.isNotEmpty) {
-
       imageFileList!.addAll(selectedImages);
     }
-
-
+    setState(() {
+    });
 
   }
 
@@ -223,30 +217,36 @@ class _PrescriptionState extends State<Prescription> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    isLoggedIn ? SvgPicture.asset(
+                                    isLoggedIn == true ? SvgPicture.asset(
                                         'assets/icons/prescriptions/prescription_icon.svg',
                                         width: 18,
                                         height: 18,
                                         color: Colors.white,
                                         semanticsLabel: 'A back arrow'
-                                    ):
-                                    Card(
-                                       elevation: 0,
-                                       margin: EdgeInsets.all(0),
-                                       color: Color(0xff00AEAE),
-                                       shape: RoundedRectangleBorder(
-                                         borderRadius: BorderRadius.all(Radius.circular(4))
-                                       ),
-                                       child: Padding(
-                                         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                                         child: Text("Login to View",
-                                           style: TextStyle(
-                                               fontWeight: FontWeight.w400,
-                                               color: Colors.white,
-                                               fontSize: 14
-                                           ),),
-                                       ),
-                                     ),
+                                    ):SvgPicture.asset(
+                                        'assets/icons/prescriptions/prescription_icon.svg',
+                                        width: 18,
+                                        height: 18,
+                                        color: Colors.white,
+                                        semanticsLabel: 'A back arrow'
+                                    ),
+                                    // Card(
+                                    //    elevation: 0,
+                                    //    margin: EdgeInsets.all(0),
+                                    //    color: Color(0xff00AEAE),
+                                    //    shape: RoundedRectangleBorder(
+                                    //      borderRadius: BorderRadius.all(Radius.circular(4))
+                                    //    ),
+                                    //    child: Padding(
+                                    //      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                                    //      child: Text("Login to View",
+                                    //        style: TextStyle(
+                                    //            fontWeight: FontWeight.w400,
+                                    //            color: Colors.white,
+                                    //            fontSize: 14
+                                    //        ),),
+                                    //    ),
+                                    //  ),
 
 
                                     const SizedBox(
@@ -288,10 +288,6 @@ class _PrescriptionState extends State<Prescription> {
                         child: ListView.builder(
                             itemCount: imageFileList?.length ?? 0,
                             scrollDirection: Axis.horizontal,
-                            // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            //     crossAxisCount: 5
-                            //
-                            // ),
                             itemBuilder: (BuildContext context, int index) {
                               return Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -314,9 +310,10 @@ class _PrescriptionState extends State<Prescription> {
                                           child: InkWell(
                                             onTap: () {
 
-                                              print("remove");
-
+                                              print("remove img");
+                                              dialogforRemoveImage(context , index);
                                               AlertDialog(
+
                                                 title: const Text('Attention'),           // To display the title it is optional
                                                 content: Text('Are you sure want to remove this prescription?'),   // Message which will be pop up on the screen
                                                 // Action widget which will provide the user to acknowledge the choice
@@ -338,8 +335,6 @@ class _PrescriptionState extends State<Prescription> {
                                                     child: Text('Ok'),
                                                   ),
                                                 ],
-
-                                                
                                               );
                                             },
                                             child: Text(
@@ -745,6 +740,46 @@ class _PrescriptionState extends State<Prescription> {
         color: Colors.black,
         fontSize: 12.0,
         fontWeight: FontWeight.w500,
+      )
+      ..show();
+  }
+  YYDialog dialogforRemoveImage(BuildContext context , int index) {
+    return YYDialog().build(context)
+      ..width = 240
+      ..borderRadius = 0.0
+
+      ..text(
+        padding: EdgeInsets.only(left: 25.0, right: 25.0 , top: 25 , bottom: 12),
+        alignment: Alignment.centerLeft,
+        text: "Are you sure want to remove this image?",
+        color: Colors.black,
+        fontSize: 12.0,
+        fontWeight: FontWeight.w500,
+      )
+
+
+      ..doubleButton(
+        padding: EdgeInsets.all(2),
+        gravity: Gravity.right,
+        withDivider: false,
+        text1: "Cancel",
+        color1: Colors.black,
+        fontSize1: 14.0,
+        fontWeight1: FontWeight.normal,
+        onTap1: () {
+          print("Cancel");
+        },
+        text2: "Yes",
+        color2: Colors.black,
+        fontSize2: 14.0,
+        fontWeight2: FontWeight.normal,
+        onTap2: () {
+
+          imageFileList?.removeAt(index);
+          setState(() {
+
+          });
+        },
       )
       ..show();
   }
