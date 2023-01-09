@@ -19,6 +19,9 @@ dependencies:
 
   inspireui: 1.2.1
 
+  #dialogs
+  flutter_custom_dialog: ^1.2.0
+
   # Base
   intl: 0.17.0
   crypto: 3.0.2

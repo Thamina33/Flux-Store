@@ -152,6 +152,7 @@ class DynamicLayout extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
                       onTap: (){

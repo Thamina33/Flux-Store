@@ -6,6 +6,7 @@ import 'package:fstore/routes/flux_navigate.dart';
 import 'package:fstore/services/dependency_injection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
 import 'common/constants.dart';
 import 'screens/index.dart';
@@ -26,10 +27,12 @@ class _PrescriptionState extends State<Prescription> {
   final ScrollController _scrollController = ScrollController() ;
 
   var isVisible = true ;
-  var notVisible = false;
+
 
 
   bool isLoggedIn = false ;
+
+
 
 
   List<XFile>? imageFileList = [];
@@ -58,8 +61,7 @@ class _PrescriptionState extends State<Prescription> {
       imageFileList!.addAll(selectedImages);
     }
 
-    setState(() {
-    });
+
 
   }
 
@@ -217,102 +219,146 @@ class _PrescriptionState extends State<Prescription> {
                                   width: 1,
                                   height: 50,
                                 ),
-                                InkWell(
-                                  onTap: () async {
-                                    isLoggedIn = getStorageKey(
-                                        LocalStorageKey.loggedIn);
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    isLoggedIn ? SvgPicture.asset(
+                                        'assets/icons/prescriptions/prescription_icon.svg',
+                                        width: 18,
+                                        height: 18,
+                                        color: Colors.white,
+                                        semanticsLabel: 'A back arrow'
+                                    ):
+                                    Card(
+                                       elevation: 0,
+                                       margin: EdgeInsets.all(0),
+                                       color: Color(0xff00AEAE),
+                                       shape: RoundedRectangleBorder(
+                                         borderRadius: BorderRadius.all(Radius.circular(4))
+                                       ),
+                                       child: Padding(
+                                         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                                         child: Text("Login to View",
+                                           style: TextStyle(
+                                               fontWeight: FontWeight.w400,
+                                               color: Colors.white,
+                                               fontSize: 14
+                                           ),),
+                                       ),
+                                     ),
 
-                                    if (isLoggedIn == false) {
-                                      isVisible = true;
-                                      notVisible = false;
-                                      FluxNavigate.pushNamed(
-                                        RouteList.login,
-                                      ).then((value) {
-                                        print("object");
-                                      });
-                                      setState(() {
 
-                                      });
-                                    }
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        isLoggedIn = getStorageKey(
+                                            LocalStorageKey.loggedIn);
 
-                                    if(isLoggedIn == true){
-                                      isVisible = false;
-                                      notVisible = true;
-                                      setState(() {
+                                        if (isLoggedIn == false) {
+                                          FluxNavigate.pushNamed(
+                                            RouteList.login,
+                                          ).then((value) {
+                                            print("object");
+                                          });
+                                          setState(() {
 
-                                      });
-                                    }
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Visibility(
-                                        visible: notVisible,
-
-                                        child: SvgPicture.asset(
-                                            'assets/icons/prescriptions/prescription_icon.svg',
-                                            width: 18,
-                                            height: 18,
-                                            color: Colors.white,
-                                            semanticsLabel: 'A back arrow'
-                                        ),
-                                      ),
-                                       Visibility(
-                                        visible: isVisible,
-                                        child: Card(
-                                          elevation: 0,
-                                          margin: EdgeInsets.all(0),
-                                          color: Color(0xff00AEAE),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(4))
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                                            child: Text("Login to View",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.white,
-                                                  fontSize: 14
-                                              ),),
-                                          ),
-                                        ),
-                                      ),
-
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                      Text("My Prescriptions",
+                                          });
+                                        }
+                                      },
+                                      child: Text("My Prescriptions",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             color: Colors.white,
                                             fontSize: 14
                                         ),),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 80,
-                        child: GridView.builder(
-                            itemCount: imageFileList!.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 5
 
-                            ),
+                      imageFileList?.length  != 0 ? SizedBox(
+                        height: 80,
+                        child: ListView.builder(
+                            itemCount: imageFileList?.length ?? 0,
+                            scrollDirection: Axis.horizontal,
+                            // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            //     crossAxisCount: 5
+                            //
+                            // ),
                             itemBuilder: (BuildContext context, int index) {
                               return Padding(
                                 padding: const EdgeInsets.all(4.0),
-                                child: Image.file(File(imageFileList![index].path), width: 80 , height: 80, fit: BoxFit.cover),
+                                child: Stack(
+                                  clipBehavior: Clip.none, fit: StackFit.passthrough,
+                                  children: <Widget>[
+                                    // Max Size Widget
+                                    Container(
+                                      height: 100,
+                                      width: 80,
+                                      child: Image.file(File(imageFileList![index].path), fit: BoxFit.cover),
+                                    ),
+                                    Positioned(
+                                      top: 52,
+                                      child: Container(
+                                        height: 20,
+                                        width: 80,
+                                        color: Color(0x80000000),
+                                        child: Center(
+                                          child: InkWell(
+                                            onTap: () {
+
+                                              print("remove");
+
+                                              AlertDialog(
+                                                title: const Text('Attention'),           // To display the title it is optional
+                                                content: Text('Are you sure want to remove this prescription?'),   // Message which will be pop up on the screen
+                                                // Action widget which will provide the user to acknowledge the choice
+                                                actions: <Widget>[
+                                                  TextButton(                     // FlatButton widget is used to make a text to work like a button
+                                                    onPressed: () {
+
+                                                    },             // function used to perform after pressing the button
+                                                    child: Text('CANCEL'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      imageFileList?.removeAt(index);
+                                                      setState(() {
+
+                                                      });
+
+                                                    },
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+
+                                                
+                                              );
+                                            },
+                                            child: Text(
+                                              'Remove',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(color: Colors.white, fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                                // Image.file(File(imageFileList![index].path), width: 80 , height: 80, fit: BoxFit.cover),
                               );
                             }
                         ),
-                      ),
-
+                      ) :
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 4),
                         child: Row(
@@ -337,29 +383,37 @@ class _PrescriptionState extends State<Prescription> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 14.0,vertical: 14),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SvgPicture.asset(
-                                'assets/icons/prescriptions/info_icon.svg',
-                                width: 18,
-                                height: 18,
-                                color: Colors.grey,
-                                semanticsLabel: 'A back arrow'
-                            ),
-                            SizedBox(width: 8,),
-                            Flexible(
-                              child: Text("Valid Prescription Guide",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.teal,
-                                    fontSize: 14
-                                ),),
-                            ),
-                          ],
+                      InkWell(
+                        onTap: (){
+                          YYAlertDialogWithDivider(context);
+                          setState(() {
+
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14.0,vertical: 14),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SvgPicture.asset(
+                                  'assets/icons/prescriptions/info_icon.svg',
+                                  width: 18,
+                                  height: 18,
+                                  color: Colors.grey,
+                                  semanticsLabel: 'A back arrow'
+                              ),
+                              SizedBox(width: 8,),
+                              Flexible(
+                                child: Text("Valid Prescription Guide",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.teal,
+                                      fontSize: 14
+                                  ),),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -377,7 +431,7 @@ class _PrescriptionState extends State<Prescription> {
                                 ),),
                             ),
                             const SizedBox(width: 18,),
-                            Visibility(
+                            isVisible ? Visibility(
                               visible: true,
                               child: InkWell(
                                 onTap: (){
@@ -397,7 +451,7 @@ class _PrescriptionState extends State<Prescription> {
                                     semanticsLabel: 'A back arrow'
                                 ),
                               ),
-                            ),
+                            ):
                             Visibility(
                               visible: true,
                               child: InkWell(
@@ -425,7 +479,7 @@ class _PrescriptionState extends State<Prescription> {
                         visible: isVisible,
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          height: 235,
+                          height: 260,
                           child: Scrollbar(
                             controller: _scrollController,
                             thumbVisibility: true ,
@@ -640,6 +694,59 @@ class _PrescriptionState extends State<Prescription> {
         ),
       ),
     );
+  }
+
+  YYDialog YYAlertDialogWithDivider(BuildContext context) {
+    return YYDialog().build(context)
+      ..width = 300
+      ..borderRadius = 4.0
+      ..divider()
+      ..doubleButton(
+        padding: EdgeInsets.only(top: 10.0),
+        gravity: Gravity.right,
+        withDivider: true,
+        text1: "",
+        color1: Colors.black,
+        fontSize1: 1.0,
+        fontWeight1: FontWeight.bold,
+        onTap1: () {
+          print("");
+          Spacer();
+        },
+        text2: "X",
+        color2: Colors.black,
+        fontSize2: 24.0,
+        fontWeight2: FontWeight.normal,
+        onTap2: () {
+          print("X");
+        },
+      )
+      ..widget( 
+          Container(
+           child: Column(
+             children: [
+               Image.asset('assets/icons/prescriptions/pp.png', width: 120, height: 200,)
+             ],
+           ),
+      )
+      )
+      ..text(
+        padding: EdgeInsets.only(left: 25.0, right: 25.0 , top: 12),
+        alignment: Alignment.centerLeft,
+        text: "Include details of doctor and patient+clinic visit details",
+        color: Colors.black,
+        fontSize: 12.0,
+        fontWeight: FontWeight.w500,
+      )
+      ..text(
+        padding: EdgeInsets.only(left: 25.0, right: 25.0 , top: 12, bottom: 25),
+        alignment: Alignment.centerLeft,
+        text: "Medicines will be dispensed as per prescription",
+        color: Colors.black,
+        fontSize: 12.0,
+        fontWeight: FontWeight.w500,
+      )
+      ..show();
   }
 
 

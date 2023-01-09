@@ -817,6 +817,7 @@ class Assets {
   static const String prescriptionsOrderRegulationIcon = 'assets/icons/prescriptions/order_regulation_icon.svg';
   static const String prescriptionsPaperSheetIcon = 'assets/icons/prescriptions/paper_sheet_icon.svg';
   static const String prescriptionsPhonePortraitIcon = 'assets/icons/prescriptions/phone_portrait_icon.svg';
+  static const String prescriptionsPp = 'assets/icons/prescriptions/pp.png';
   static const String prescriptionsPpLg = 'assets/icons/prescriptions/pp_lg.png';
   static const String prescriptionsPrescriptionIcon = 'assets/icons/prescriptions/prescription_icon.svg';
   static const String prescriptionsPrescriptionPaperIcon = 'assets/icons/prescriptions/prescription_paper_icon.svg';
