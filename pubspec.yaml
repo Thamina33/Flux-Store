@@ -57,6 +57,7 @@ dependencies:
   firebase_dynamic_links_platform_interface: 0.2.3+20
   cloud_firestore_platform_interface: 5.8.4
   firebase_messaging_platform_interface: 4.2.5
+  dotted_border: ^2.0.0+2
 
   # PUSH NOTIFICATION
   firebase_messaging: 14.0.4
