@@ -136,4 +136,8 @@ class RouteList {
   static const String pageTab = 'pageTab';
   static const String prescription  ='prescription';
   static const String Myprescriptions  ='Myprescriptions';
+  static const String addShippingAddress  ='addShippingAddress';
+  static const String cartPrescriotion  ='cartPrescriotion';
+  static const String chekoutPrescriotion  ='chekoutPrescriotion';
+
 }

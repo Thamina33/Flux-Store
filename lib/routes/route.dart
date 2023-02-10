@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inspireui/inspireui.dart' show AutoHideKeyboard;
 import 'package:provider/provider.dart';
 
-import '../MyPrescriptions.dart';
+import '../prescription_feature/MyPrescriptions.dart';
 import '../common/config.dart';
 import '../common/constants.dart';
 import '../common/tools.dart';
@@ -20,7 +20,10 @@ import '../models/index.dart'
 import '../modules/dynamic_layout/helper/helper.dart';
 import '../modules/dynamic_layout/index.dart';
 import '../modules/sms_login/sms_login.dart';
-import '../prescription.dart';
+import '../prescription_feature/addShippingAddress.dart';
+import '../prescription_feature/cartPrescriotion.dart';
+import '../prescription_feature/checkoutPrescription.dart';
+import '../prescription_feature/prescription.dart';
 import '../screens/brand/brand_backdrop.dart';
 import '../screens/dynamic/dynamic_scrollable_screen.dart';
 import '../screens/dynamic/dynamic_tabmenu_screen.dart';
@@ -93,7 +96,8 @@ class Routes {
 
           // Brand Back Drop
           if (arguments.brandId != null) {
-            final routeSetting = settings.copyWith(name: RouteList.brand);
+            var na = settings.arguments ;
+            final routeSetting = RouteSettings(name: RouteList.brand , arguments: na);
             return _buildRoute(routeSetting, (context) {
               final brandId = arguments.brandId;
               final brandName = arguments.brandName;
@@ -133,7 +137,8 @@ class Routes {
           /// is Wordpress Blog list
           /// That mean support backdrop, category, etc
           if (isWordpressBlog) {
-            final routeSetting = settings.copyWith(name: RouteList.blogs);
+            var na = settings.arguments ;
+            final routeSetting = RouteSettings(name: RouteList.blogs , arguments : na );
             return _buildRoute(routeSetting, (context) {
               final cateId = arguments.cateId;
               final cateName = arguments.cateName;
@@ -171,7 +176,8 @@ class Routes {
           }
 
           // Woo
-          final routeSetting = settings.copyWith(name: RouteList.products);
+          var na = settings.arguments ;
+          final routeSetting = RouteSettings(name: RouteList.products , arguments:  na);
           return _buildRoute(routeSetting, (context) {
             final cateId = arguments.cateId;
             final cateName = arguments.cateName;
@@ -535,6 +541,22 @@ class Routes {
         return _buildRoute(
           settings,
               (context) => const MyPrescriptions(),
+        );
+
+      case RouteList.addShippingAddress:
+        return _buildRoute(
+          settings,
+              (context) => const addShippingAddress(),
+        );
+      case RouteList.cartPrescriotion:
+        return _buildRoute(
+          settings,
+              (context) => const cartPrescriotion(),
+        );
+      case RouteList.chekoutPrescriotion:
+        return _buildRoute(
+          settings,
+              (context) => const chekoutPrescriotion(),
         );
 
       case RouteList.cart:

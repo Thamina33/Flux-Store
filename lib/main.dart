@@ -80,6 +80,7 @@ void main() {
     } catch (e) {
       printLog(e);
       printLog('🔴 Firebase init issue');
+     // printLog()
     }
 
     await DependencyInjection.inject();

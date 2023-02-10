@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../MyPrescriptions.dart';
+import '../prescription_feature/MyPrescriptions.dart';
 import '../common/config.dart';
 import '../common/config/models/index.dart';
 import '../common/constants.dart';
@@ -11,7 +12,7 @@ import '../models/index.dart'
     show AppModel, BackDropArguments, Category, CategoryModel, UserModel;
 import '../modules/dynamic_layout/config/app_config.dart';
 import '../modules/dynamic_layout/helper/helper.dart';
-import '../prescription.dart';
+import '../prescription_feature/prescription.dart';
 import '../routes/flux_navigate.dart';
 import '../services/index.dart';
 import '../widgets/common/index.dart' show FluxImage, WebView;
@@ -26,6 +27,10 @@ class SideBarMenu extends StatefulWidget {
 }
 
 class MenuBarState extends State<SideBarMenu> {
+  bool getStorageKey(String key) =>
+      injector<SharedPreferences>().getBool(key) ?? false;
+
+  bool isLoggedIn = false ;
   bool get isEcommercePlatform =>
       !ServerConfig().isListingType || !ServerConfig().isWordPress;
 
@@ -165,11 +170,24 @@ class MenuBarState extends State<SideBarMenu> {
                   color: iconColor,
                 ),
                 title: Text("My Prescription"),
-                onTap: () => {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyPrescriptions()))
+                onTap: () async {
 
-              }
-              ),
+    isLoggedIn = getStorageKey(LocalStorageKey.loggedIn);
+
+     if(isLoggedIn == false){
+    await FluxNavigate.pushNamed(
+    RouteList.login,
+    );}
+    else {
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) =>  const MyPrescriptions()));
+
+    }
+
+    }
+
+
+    ),
             ],
           );
 

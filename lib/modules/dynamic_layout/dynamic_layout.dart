@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../common/constants.dart';
 import '../../common/tools.dart';
 import '../../models/index.dart';
-import '../../prescription.dart';
+import '../../prescription_feature/prescription.dart';
 import '../../routes/flux_navigate.dart';
 import '../../services/index.dart';
 import 'banner/banner_animate_items.dart';
@@ -160,7 +160,7 @@ class DynamicLayout extends StatelessWidget {
                       },
                       child: SizedBox(
                         width: 110,
-                        height: 110,
+                        height: 140,
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)
@@ -176,7 +176,7 @@ class DynamicLayout extends StatelessWidget {
                               children: [
                                 Text("Upload\nPrescription", style:
                                   TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     color: Colors.black
                                   ),),
                                 Spacer(),
@@ -202,7 +202,7 @@ class DynamicLayout extends StatelessWidget {
                     ),
                     SizedBox(
                       width: 110,
-                      height: 110,
+                      height: 140,
                       child: Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)
@@ -218,7 +218,7 @@ class DynamicLayout extends StatelessWidget {
                             children: [
                               Text("Call For Order\n01234567890", style:
                               TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   color: Colors.black
                               ),),
                               Spacer(),
@@ -230,7 +230,7 @@ class DynamicLayout extends StatelessWidget {
                                     color: Color(0xFF32CD30),
                                     height: 16,),
                                   Spacer(),
-                                  Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                  Image(image: AssetImage("assets/icons/prescriptions/hp.png"),
                                     width: 34,
                                     height: 34,),
                                 ],
@@ -243,7 +243,7 @@ class DynamicLayout extends StatelessWidget {
                     ),
                     SizedBox(
                       width: 110,
-                      height: 110,
+                      height: 140,
                       child: Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)
@@ -259,7 +259,7 @@ class DynamicLayout extends StatelessWidget {
                             children: [
                               Text("Healthcare\nProduct", style:
                               TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   color: Colors.black
                               ),),
                               Spacer(),
@@ -271,7 +271,7 @@ class DynamicLayout extends StatelessWidget {
                                     color: Color(0xFF8F00FF),
                                     height: 16,),
                                   Spacer(),
-                                  Image(image: AssetImage("assets/icons/prescriptions/pp_lg.png"),
+                                  Image(image: AssetImage("assets/icons/prescriptions/health.png"),
                                     width: 34,
                                     height: 34,),
                                 ],

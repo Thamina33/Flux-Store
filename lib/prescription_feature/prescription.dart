@@ -4,12 +4,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fstore/routes/flux_navigate.dart';
 import 'package:fstore/services/dependency_injection.dart';
+import 'package:fstore/services/remote_services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
-
-import 'common/constants.dart';
-import 'screens/index.dart';
+import 'package:http/http.dart' as http;
+import '../common/constants.dart';
+import '../models/entities/user.dart';
+import '../models/user_model.dart';
+import '../screens/index.dart';
+import 'MyPrescriptions.dart';
+import 'addShippingAddress.dart';
+import 'cartPrescriotion.dart';
 
 
 
@@ -21,6 +28,8 @@ class Prescription extends StatefulWidget {
 }
 
 class _PrescriptionState extends State<Prescription> {
+  User? get user => Provider.of<UserModel>(context, listen: false).user;
+
   bool getStorageKey(String key) =>
       injector<SharedPreferences>().getBool(key) ?? false;
   final ImagePicker imagePicker = ImagePicker();
@@ -34,20 +43,19 @@ class _PrescriptionState extends State<Prescription> {
 
   List<XFile>? imageFileList = [];
 
+
   void openCamera() async {
-    final selectedImages = await imagePicker.pickImage(source: ImageSource.camera);
+    final selectedImages = await imagePicker.pickImage(
+        source: ImageSource.camera);
 
     if (selectedImages != null) {
-
       imageFileList?.add(selectedImages);
+
     }
     setState(() {
     });
 
   }
-
-
-
   void selectImages() async {
     final selectedImages = await imagePicker.pickMultiImage();
 
@@ -61,8 +69,49 @@ class _PrescriptionState extends State<Prescription> {
 
 
 
+
+
+  Future<bool> updateImage() async{
+
+
+    var _accessToken =  user?.email.toString() ; //'rahat@gmail.com';
+    var url = 'https://fluxstore.spinnertechltd.com/api/prescriptions/upload';
+
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers['Accept'] = 'application/json';
+    request.fields['email'] = _accessToken.toString();
+    // request.fields['firstName'] = authModel.data.firstName;
+    // request.fields['lastName'] = authModel.data.lastName;
+    // request.fields['surname'] = authModel.data.surname;
+    var files = <http.MultipartFile>[];
+    for(XFile file in imageFileList ?? [] ){
+      var f = await http.MultipartFile.fromPath('images[]',
+          file.path);
+          files.add(f);
+    }
+   // request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+    request.files.addAll(files);
+    var res = await request.send();
+    final respStr = await res.stream.bytesToString();
+    print('responseBody: ' + respStr);
+    if(res.statusCode==200){
+      return true;
+    }
+    else {
+      print(respStr);
+      printLog('Failed');
+      return false;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserModel>(context, listen: false).user != null
+        ? Provider.of<UserModel>(context, listen: false).user!.cookie
+        : null;
+
+    print("object-> $token");
 
     return MaterialApp(
       home: Scaffold(
@@ -79,12 +128,12 @@ class _PrescriptionState extends State<Prescription> {
                 color: Colors.white,
                 child: SafeArea(child:
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
+                  padding: const EdgeInsets.only(bottom: 6),
                   child: Row(
                     children: [
                       SizedBox(width: 12, height: 0),
                       InkWell(
-                        onTap: (){
+                          onTap: (){
                           Navigator.pop(context);
                         },
                         child: SvgPicture.asset(
@@ -98,10 +147,10 @@ class _PrescriptionState extends State<Prescription> {
 
                       Text("Prescription",
                         style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
-                            fontSize: 16
-                        ),),
+                          color: Theme.of(context).colorScheme.secondary,
+                  fontWeight: FontWeight.w400,
+                    ),
+                      ),
 
                     ],
                   ),
@@ -223,7 +272,8 @@ class _PrescriptionState extends State<Prescription> {
                                         height: 18,
                                         color: Colors.white,
                                         semanticsLabel: 'A back arrow'
-                                    ):SvgPicture.asset(
+                                    ):
+                                    SvgPicture.asset(
                                         'assets/icons/prescriptions/prescription_icon.svg',
                                         width: 18,
                                         height: 18,
@@ -267,6 +317,9 @@ class _PrescriptionState extends State<Prescription> {
 
                                           });
                                         }
+                                        await Navigator.push(context, MaterialPageRoute(builder: (context) => const
+                                            MyPrescriptions()));
+
                                       },
                                       child: Text("My Prescriptions",
                                         style: TextStyle(
@@ -283,8 +336,10 @@ class _PrescriptionState extends State<Prescription> {
                         ),
                       ),
 
+                      SizedBox(height: 16,),
+
                       imageFileList?.length  != 0 ? SizedBox(
-                        height: 80,
+                        height: 90,
                         child: ListView.builder(
                             itemCount: imageFileList?.length ?? 0,
                             scrollDirection: Axis.horizontal,
@@ -296,12 +351,12 @@ class _PrescriptionState extends State<Prescription> {
                                   children: <Widget>[
                                     // Max Size Widget
                                     Container(
-                                      height: 100,
+                                      height: 90,
                                       width: 80,
                                       child: Image.file(File(imageFileList![index].path), fit: BoxFit.cover),
                                     ),
                                     Positioned(
-                                      top: 52,
+                                      top: 62,
                                       child: Container(
                                         height: 20,
                                         width: 80,
@@ -563,7 +618,7 @@ class _PrescriptionState extends State<Prescription> {
                                               color: Color(0xff454545),
                                               semanticsLabel: 'A back arrow'
                                           ),
-                                          SizedBox(width: 12,),
+                                          const SizedBox(width: 12,),
                                           const Flexible(
                                             child: Text("আপনার প্রেসক্রিপশন কখনো তৃতীয় কোন পক্ষের সাথে শেয়ার করা হবে না।",
                                               style: TextStyle(
@@ -579,7 +634,7 @@ class _PrescriptionState extends State<Prescription> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 6,),
+                                    const SizedBox(height: 6,),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                                       child: Row(
@@ -593,7 +648,7 @@ class _PrescriptionState extends State<Prescription> {
                                               color: Color(0xff454545),
                                               semanticsLabel: 'A back arrow'
                                           ),
-                                          SizedBox(width: 12,),
+                                          const SizedBox(width: 12,),
                                           const Flexible(
                                             child: Text("বাংলাদেশ সরকারের নিয়ম অনুসারে, কিছু মেডিসিন অর্ডার করার জন্য প্রেসক্রিপশন থাকা বাধ্যতামুলক।",
                                               style: TextStyle(
@@ -616,7 +671,7 @@ class _PrescriptionState extends State<Prescription> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
 
@@ -625,7 +680,9 @@ class _PrescriptionState extends State<Prescription> {
                   ),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
+
+              //continue button
               Container(
                 alignment: Alignment.bottomCenter,
                 margin: EdgeInsets.only(left: 12,right: 12, top: 12 , bottom: 12),
@@ -636,18 +693,30 @@ class _PrescriptionState extends State<Prescription> {
                     isLoggedIn = getStorageKey(LocalStorageKey.loggedIn);
 
                     if(isLoggedIn == false){
-                       FluxNavigate.pushNamed(
+                       await FluxNavigate.pushNamed(
                         RouteList.login,
                       ).then((value) {
 
-                        print("object");
+                       //updateImage();
 
                       });
+                    }
+                    else {
+                      if(imageFileList != null && imageFileList?.isEmpty == false   ){
+                        await updateImage();
+
+                          await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                           cartPrescriotion(imageFileList: imageFileList,)));
+
+                      }else {
+                        print("object  please  select some imgae");
+                      }
+
                     }
                   },
                   child: Card(
                     elevation: 0,
-                    margin: EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
                     color: Colors.teal,
                     shape: RoundedRectangleBorder(
                       //side: BorderSide(color: Colors.white70, width: 1),
@@ -660,9 +729,7 @@ class _PrescriptionState extends State<Prescription> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-
-
-                          Text("Continue",
+                          const Text('Continue',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,

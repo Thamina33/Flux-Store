@@ -17,14 +17,14 @@ import 'widgets/success.dart';
 
 class CheckoutArgument {
   final bool? isModal;
-
   const CheckoutArgument({this.isModal});
 }
 
 class Checkout extends StatefulWidget {
   final bool? isModal;
+  final bool? isPrescription ;
 
-  const Checkout({this.isModal});
+  const Checkout({this.isModal , this.isPrescription});
 
   @override
   BaseScreen<Checkout> createState() => _CheckoutState();
